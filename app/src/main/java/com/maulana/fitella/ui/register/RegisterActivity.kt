@@ -28,7 +28,7 @@ class RegisterActivity : ComponentActivity() {
         }
     }
 
-    @Preview
+    @Preview(showBackground = true)
     @Composable
     fun ContentUi() {
         Box(modifier = Modifier.fillMaxSize()) {

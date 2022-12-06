@@ -42,7 +42,7 @@ class OnboardActivity : ComponentActivity() {
         }
     }
 
-    @Preview
+    @Preview(showBackground = true)
     @Composable
     fun ContentUi() {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -51,7 +51,6 @@ class OnboardActivity : ComponentActivity() {
             ContentOnboard()
         }
     }
-
 
     @Composable
     fun ContentOnboard() {

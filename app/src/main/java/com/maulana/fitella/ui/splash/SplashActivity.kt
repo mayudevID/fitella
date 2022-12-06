@@ -52,7 +52,7 @@ class SplashActivity : ComponentActivity() {
         )
     }
 
-    @Preview
+    @Preview(showBackground = true)
     @Composable
     fun ContentUi() {
         Box(modifier = Modifier.fillMaxSize()) {
