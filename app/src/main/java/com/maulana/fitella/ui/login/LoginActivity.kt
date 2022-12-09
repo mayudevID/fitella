@@ -1,6 +1,8 @@
 package com.maulana.fitella.ui.login
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -16,10 +18,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -29,16 +33,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maulana.fitella.R
-import com.maulana.fitella.theme.Color2
-import com.maulana.fitella.theme.Color5
-import com.maulana.fitella.theme.FitellaTheme
-import com.maulana.fitella.theme.Poppins
+import com.maulana.fitella.theme.*
 import com.maulana.fitella.ui.widget.BallDown
 import com.maulana.fitella.ui.widget.BallUp
+import com.maulana.fitella.utils.BoxWithLayout
 
 class LoginActivity : ComponentActivity() {
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -59,6 +59,7 @@ class LoginActivity : ComponentActivity() {
             BallUp()
             BallDown()
             ContentLogin()
+            ColumnBottom()
         }
     }
 
@@ -88,6 +89,99 @@ class LoginActivity : ComponentActivity() {
             EmailBox()
             Spacer(modifier = Modifier.height(Dp(32f)))
             PasswordBox()
+            Spacer(modifier = Modifier.height(Dp(8f)))
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Remember me",
+                    style = TextStyle(
+                        fontFamily = Poppins,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = ColorGray
+                    ),
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = "Forgot Password",
+                    style = TextStyle(
+                        fontFamily = Poppins,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = ColorGray
+                    ),
+                )
+            }
+            Spacer(modifier = Modifier.height(43.dp))
+            Button(
+                shape = RoundedCornerShape(100),
+                modifier = Modifier
+                    .size(Dp(218f), Dp(40f))
+                    .shadow(
+                        shape = RoundedCornerShape(100),
+                        elevation = 7.dp,
+                        ambientColor = Color5,
+                        spotColor = Color5
+                    ),
+                elevation = ButtonDefaults.elevation(0.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color5),
+                onClick = {
+
+                }
+            ) {
+                Text(
+                    text = "LOGIN",
+                    style = TextStyle(
+                        fontFamily = Poppins,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = Color.White,
+                    )
+                )
+            }
+            Spacer(modifier = Modifier.height(19.dp))
+            Text(
+                text = "Or", style = TextStyle(
+                    fontFamily = Poppins,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 14.sp,
+                    color = ColorGray,
+                )
+            )
+            Row() {
+                Box(
+                    contentAlignment = Alignment.Center
+                ) {
+                    Button(
+                        modifier = Modifier.size(54.dp),
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                        onClick = { }
+                    ) {
+
+                    }
+                    Image(
+                        modifier = Modifier.size(38.67.dp),
+                        painter = painterResource(R.drawable.google),
+                        contentDescription = "Google"
+                    )
+                }
+                Spacer(modifier = Modifier.width(40.dp))
+                Button(
+                    modifier = Modifier.size(54.dp),
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF3B5998)),
+                    onClick = { }
+                ) {
+                    Image(
+                        modifier = Modifier.size(14.27.dp, 28.88.dp),
+                        painter = painterResource(R.drawable.facebook),
+                        contentDescription = "Facebook"
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(79.dp))
         }
     }
 
@@ -114,7 +208,7 @@ class LoginActivity : ComponentActivity() {
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = Poppins,
-                        color = Color(0xFF9A9A9A)
+                        color = ColorGray
                     )
                 )
             }
@@ -167,7 +261,7 @@ class LoginActivity : ComponentActivity() {
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = Poppins,
-                        color = Color(0xFF9A9A9A)
+                        color = ColorGray
                     )
                 )
             }
@@ -209,6 +303,39 @@ class LoginActivity : ComponentActivity() {
                     contentDescription = "EYE",
                     alignment = Alignment.Center,
                 )
+            }
+        }
+    }
+
+    @Composable
+    fun ColumnBottom() {
+        BoxWithLayout {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Don’t have any account?",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Normal,
+                        fontFamily = Poppins,
+                        fontSize = 14.sp,
+                        color = ColorGray,
+                    )
+                )
+                Text(
+                    text = "Sign Up.",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = Poppins,
+                        fontSize = 16.sp,
+                        fontStyle = FontStyle.Italic,
+                        color = Color2
+                    )
+                )
+                Spacer(modifier = Modifier.height(21.dp))
             }
         }
     }
