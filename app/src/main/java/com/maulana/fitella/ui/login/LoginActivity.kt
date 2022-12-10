@@ -91,8 +91,15 @@ class LoginActivity : ComponentActivity() {
             PasswordBox()
             Spacer(modifier = Modifier.height(Dp(8f)))
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
+                Image(
+                    modifier = Modifier.size(10.dp),
+                    painter = painterResource(R.drawable.unclicked),
+                    contentDescription = "Remember Button"
+                )
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Remember me",
                     style = TextStyle(
