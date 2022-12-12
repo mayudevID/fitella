@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maulana.fitella.R
 import com.maulana.fitella.theme.*
+import com.maulana.fitella.ui.app_menu.MainActivity
 import com.maulana.fitella.ui.widget.BallDown
 import com.maulana.fitella.ui.widget.BallUp
 import com.maulana.fitella.utils.BoxWithLayout
@@ -134,7 +135,8 @@ class LoginActivity : ComponentActivity() {
                 elevation = ButtonDefaults.elevation(0.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color5),
                 onClick = {
-
+                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                    finishAffinity()
                 }
             ) {
                 Text(
@@ -166,7 +168,6 @@ class LoginActivity : ComponentActivity() {
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                         onClick = { }
                     ) {
-
                     }
                     Image(
                         modifier = Modifier.size(38.67.dp),
