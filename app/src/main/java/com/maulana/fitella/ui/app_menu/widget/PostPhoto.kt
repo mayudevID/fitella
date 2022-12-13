@@ -25,7 +25,7 @@ import com.maulana.fitella.theme.Poppins
 
 @Preview
 @Composable
-fun PostMap() {
+fun PostPhoto() {
     Card(
         modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
         elevation = 0.dp,
@@ -41,7 +41,7 @@ fun PostMap() {
                     modifier = Modifier
                         .size(31.dp)
                         .clip(CircleShape),
-                    painter = painterResource(com.maulana.fitella.R.drawable.temp_1),
+                    painter = painterResource(com.maulana.fitella.R.drawable.temp_2),
                     contentDescription = "Prof Pict"
                 )
                 Spacer(modifier = Modifier.width(10.dp))
@@ -51,7 +51,7 @@ fun PostMap() {
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = "justin_27",
+                        text = "marsha_aja",
                         style = TextStyle(
                             fontFamily = Poppins,
                             fontSize = 10.sp,
@@ -60,7 +60,7 @@ fun PostMap() {
                         ),
                     )
                     Text(
-                        text = "Jalan K.H Mas Mansyur",
+                        text = "Gelora Bung Karno",
                         style = TextStyle(
                             fontFamily = Poppins,
                             fontSize = 10.sp,
@@ -84,7 +84,7 @@ fun PostMap() {
                     .height(280.dp)
                     .clip(RoundedCornerShape(10.dp)),
                 contentScale = ContentScale.FillBounds,
-                painter = painterResource(com.maulana.fitella.R.drawable.temp_map),
+                painter = painterResource(com.maulana.fitella.R.drawable.temp_post),
                 contentDescription = "Photo"
             )
             Spacer(modifier = Modifier.height(9.dp))
@@ -125,7 +125,7 @@ fun PostMap() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "justin_27 ",
+                    text = "marsha_aja ",
                     style = TextStyle(
                         fontFamily = Poppins,
                         fontSize = 10.sp,

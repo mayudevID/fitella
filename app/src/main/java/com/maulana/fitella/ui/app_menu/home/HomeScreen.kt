@@ -3,7 +3,9 @@ package com.maulana.fitella.ui.app_menu.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,37 +21,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maulana.fitella.theme.Color2
 import com.maulana.fitella.theme.Poppins
+import com.maulana.fitella.ui.app_menu.widget.PostInfo
+import com.maulana.fitella.ui.app_menu.widget.PostMap
+import com.maulana.fitella.ui.app_menu.widget.PostPhoto
 
 @Preview(showBackground = true)
 @Composable
 fun HomeScreen() {
     Surface {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-//            LazyColumn {
-//                items() {
-//
-//                }
-//            }
+        Column(Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier
-                    .align(Alignment.TopCenter)
                     .fillMaxWidth()
                     .background(Color.White)
                     .padding(10.dp)
                     .height(57.dp),
             ) {
-                Box(
+                Card(
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .fillMaxSize()
-                        .background(Color2, RoundedCornerShape(100))
-                        .padding(horizontal = 20.dp)
+                        .fillMaxSize(),
+                    backgroundColor = Color2,
+                    shape = RoundedCornerShape(100)
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 20.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
@@ -73,6 +71,15 @@ fun HomeScreen() {
                             modifier = Modifier.size(17.dp),
                             contentDescription = "Pesan",
                         )
+                    }
+                }
+            }
+            LazyColumn(modifier = Modifier.padding(horizontal = 10.dp)) {
+                items(3) {
+                    when(it) {
+                        0 -> PostMap()
+                        1 -> PostInfo()
+                        2 -> PostPhoto()
                     }
                 }
             }

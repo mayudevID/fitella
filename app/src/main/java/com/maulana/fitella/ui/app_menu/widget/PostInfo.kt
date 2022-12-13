@@ -11,8 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
@@ -26,7 +29,7 @@ import com.maulana.fitella.theme.Poppins
 @Composable
 fun PostInfo() {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
         elevation = 0.dp,
         backgroundColor = Color(0xFFF2F2F2),
         //Color(0xFFECECEC),
@@ -70,6 +73,46 @@ fun PostInfo() {
                     }
                 )
             }
+            Spacer(modifier = Modifier.height(9.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier.size(15.dp),
+                    imageVector = ImageVector.vectorResource(R.drawable.like),
+                    contentDescription = "Like",
+                )
+                Spacer(modifier = Modifier.width(11.dp))
+                Image(
+                    modifier = Modifier.size(15.dp),
+                    imageVector = ImageVector.vectorResource(R.drawable.comment),
+                    contentDescription = "Comment",
+                )
+                Spacer(modifier = Modifier.width(11.dp))
+                Image(
+                    modifier = Modifier.size(15.dp),
+                    imageVector = ImageVector.vectorResource(R.drawable.share),
+                    contentDescription = "Share",
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = "28 likes", style = TextStyle(
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        fontFamily = Poppins,
+                        color = Color.Black,
+                    )
+                )
+            }
+            Text(
+                modifier = Modifier.align(Alignment.End),
+                text = "Just Now", style = TextStyle(
+                    fontFamily = Poppins,
+                    fontSize = 6.sp,
+                    fontWeight = FontWeight.Light,
+                    color = Color.Black
+                )
+            )
         }
     }
 }
