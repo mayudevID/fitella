@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.maulana.fitella.R
 import com.maulana.fitella.theme.*
 import com.maulana.fitella.ui.app_menu.MainActivity
+import com.maulana.fitella.ui.register.RegisterActivity
 import com.maulana.fitella.ui.widget.BallDown
 import com.maulana.fitella.ui.widget.BallUp
 import com.maulana.fitella.utils.BoxWithLayout
@@ -107,7 +109,8 @@ class LoginActivity : ComponentActivity() {
                         fontFamily = Poppins,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Normal,
-                        color = ColorGray
+                        color = ColorGray,
+                        baselineShift = BaselineShift(-0.21f)
                     ),
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -117,13 +120,13 @@ class LoginActivity : ComponentActivity() {
                         fontFamily = Poppins,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Normal,
-                        color = ColorGray
+                        color = ColorGray,
+                        baselineShift = BaselineShift(-0.21f)
                     ),
                 )
             }
             Spacer(modifier = Modifier.height(43.dp))
-            Button(
-                shape = RoundedCornerShape(100),
+            Button(shape = RoundedCornerShape(100),
                 modifier = Modifier
                     .size(Dp(218f), Dp(40f))
                     .shadow(
@@ -137,11 +140,9 @@ class LoginActivity : ComponentActivity() {
                 onClick = {
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finishAffinity()
-                }
-            ) {
+                }) {
                 Text(
-                    text = "LOGIN",
-                    style = TextStyle(
+                    text = "LOGIN", style = TextStyle(
                         fontFamily = Poppins,
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
@@ -162,13 +163,10 @@ class LoginActivity : ComponentActivity() {
                 Box(
                     contentAlignment = Alignment.Center
                 ) {
-                    Button(
-                        modifier = Modifier.size(54.dp),
+                    Button(modifier = Modifier.size(54.dp),
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-                        onClick = { }
-                    ) {
-                    }
+                        onClick = { }) {}
                     Image(
                         modifier = Modifier.size(38.67.dp),
                         painter = painterResource(R.drawable.google),
@@ -176,12 +174,10 @@ class LoginActivity : ComponentActivity() {
                     )
                 }
                 Spacer(modifier = Modifier.width(40.dp))
-                Button(
-                    modifier = Modifier.size(54.dp),
+                Button(modifier = Modifier.size(54.dp),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF3B5998)),
-                    onClick = { }
-                ) {
+                    onClick = { }) {
                     Image(
                         modifier = Modifier.size(14.27.dp, 28.88.dp),
                         painter = painterResource(R.drawable.facebook),
@@ -189,14 +185,13 @@ class LoginActivity : ComponentActivity() {
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(79.dp))
+            Spacer(modifier = Modifier.height(120.dp))
         }
     }
 
     @Composable
     fun EmailBox() {
         var email by remember { mutableStateOf(TextFieldValue("")) }
-        var isHintEmailVisible by remember { mutableStateOf(true) }
 
         Box(
             modifier = Modifier
@@ -206,7 +201,7 @@ class LoginActivity : ComponentActivity() {
                 .border(width = 1.dp, color = Color5, shape = RoundedCornerShape(10.dp)),
             contentAlignment = Alignment.CenterStart
         ) {
-            if (isHintEmailVisible) {
+            if (email.text.isEmpty() || email.text == "") {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -216,7 +211,8 @@ class LoginActivity : ComponentActivity() {
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = Poppins,
-                        color = ColorGray
+                        color = ColorGray,
+                        baselineShift = BaselineShift(-0.21f)
                     )
                 )
             }
@@ -235,11 +231,11 @@ class LoginActivity : ComponentActivity() {
                     fontWeight = FontWeight.Medium,
                     fontFamily = Poppins,
                     color = Color.Black,
+                    baselineShift = BaselineShift(-0.21f)
                 ),
                 value = email,
                 onValueChange = {
                     if (it.text.length <= 50) email = it
-                    isHintEmailVisible = it.text.isEmpty() || it.text == ""
                 },
             )
         }
@@ -248,7 +244,6 @@ class LoginActivity : ComponentActivity() {
     @Composable
     fun PasswordBox() {
         var password by remember { mutableStateOf(TextFieldValue("")) }
-        var isHintPasswordVisible by remember { mutableStateOf(true) }
         var isPasswordVisible by remember { mutableStateOf(false) }
 
         Box(
@@ -259,7 +254,7 @@ class LoginActivity : ComponentActivity() {
                 .border(width = 1.dp, color = Color5, shape = RoundedCornerShape(10.dp)),
             contentAlignment = Alignment.CenterStart
         ) {
-            if (isHintPasswordVisible) {
+            if (password.text.isEmpty() || password.text == "") {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -269,7 +264,8 @@ class LoginActivity : ComponentActivity() {
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = Poppins,
-                        color = ColorGray
+                        color = ColorGray,
+                        baselineShift = BaselineShift(-0.21f)
                     )
                 )
             }
@@ -292,12 +288,13 @@ class LoginActivity : ComponentActivity() {
                         fontWeight = FontWeight.Medium,
                         fontFamily = Poppins,
                         color = Color.Black,
+                        baselineShift = BaselineShift(-0.21f)
                     ),
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     value = password,
                     onValueChange = {
                         if (it.text.length <= 50) password = it
-                        isHintPasswordVisible = it.text.isEmpty() || it.text == ""
+
                     },
                 )
                 Image(
@@ -325,23 +322,27 @@ class LoginActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Don’t have any account?",
-                    style = TextStyle(
+                    text = "Don’t have any account?", style = TextStyle(
                         fontWeight = FontWeight.Normal,
                         fontFamily = Poppins,
                         fontSize = 14.sp,
                         color = ColorGray,
+                        baselineShift = BaselineShift(-0.21f)
                     )
                 )
                 Text(
-                    text = "Sign Up.",
-                    style = TextStyle(
+                    text = "Sign Up.", style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontFamily = Poppins,
                         fontSize = 16.sp,
                         fontStyle = FontStyle.Italic,
-                        color = Color2
-                    )
+                        color = Color2,
+                        baselineShift = BaselineShift(-0.21f)
+                    ),
+
+                    modifier = Modifier.clickable {
+                        startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+                    }
                 )
                 Spacer(modifier = Modifier.height(21.dp))
             }

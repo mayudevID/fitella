@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -194,7 +195,7 @@ class RegisterActivity : ComponentActivity() {
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(90.dp))
 
         }
     }
@@ -202,7 +203,6 @@ class RegisterActivity : ComponentActivity() {
     @Composable
     fun EmailBox() {
         var email by remember { mutableStateOf(TextFieldValue("")) }
-        var isHintEmailVisible by remember { mutableStateOf(true) }
 
         Box(
             modifier = Modifier
@@ -212,7 +212,7 @@ class RegisterActivity : ComponentActivity() {
                 .border(width = 1.dp, color = Color5, shape = RoundedCornerShape(10.dp)),
             contentAlignment = Alignment.CenterStart
         ) {
-            if (isHintEmailVisible) {
+            if (email.text.isEmpty() || email.text == "") {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -222,7 +222,8 @@ class RegisterActivity : ComponentActivity() {
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = Poppins,
-                        color = ColorGray
+                        color = ColorGray,
+                        baselineShift = BaselineShift(-0.21f)
                     )
                 )
             }
@@ -241,11 +242,11 @@ class RegisterActivity : ComponentActivity() {
                     fontWeight = FontWeight.Medium,
                     fontFamily = Poppins,
                     color = Color.Black,
+                    baselineShift = BaselineShift(-0.21f)
                 ),
                 value = email,
                 onValueChange = {
                     if (it.text.length <= 50) email = it
-                    isHintEmailVisible = it.text.isEmpty() || it.text == ""
                 },
             )
         }
@@ -254,7 +255,6 @@ class RegisterActivity : ComponentActivity() {
     @Composable
     fun NameBox() {
         var name by remember { mutableStateOf(TextFieldValue("")) }
-        var isHintNameVisible by remember { mutableStateOf(true) }
 
         Box(
             modifier = Modifier
@@ -264,7 +264,7 @@ class RegisterActivity : ComponentActivity() {
                 .border(width = 1.dp, color = Color5, shape = RoundedCornerShape(10.dp)),
             contentAlignment = Alignment.CenterStart
         ) {
-            if (isHintNameVisible) {
+            if (name.text.isEmpty() || name.text == "") {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -274,7 +274,8 @@ class RegisterActivity : ComponentActivity() {
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = Poppins,
-                        color = ColorGray
+                        color = ColorGray,
+                        baselineShift = BaselineShift(-0.21f)
                     )
                 )
             }
@@ -293,11 +294,11 @@ class RegisterActivity : ComponentActivity() {
                     fontWeight = FontWeight.Medium,
                     fontFamily = Poppins,
                     color = Color.Black,
+                    baselineShift = BaselineShift(-0.21f)
                 ),
                 value = name,
                 onValueChange = {
                     if (it.text.length <= 50) name = it
-                    isHintNameVisible = it.text.isEmpty() || it.text == ""
                 },
             )
         }
@@ -306,7 +307,6 @@ class RegisterActivity : ComponentActivity() {
     @Composable
     fun UsernameBox() {
         var username by remember { mutableStateOf(TextFieldValue("")) }
-        var isHintUsernameVisible by remember { mutableStateOf(true) }
 
         Box(
             modifier = Modifier
@@ -316,7 +316,7 @@ class RegisterActivity : ComponentActivity() {
                 .border(width = 1.dp, color = Color5, shape = RoundedCornerShape(10.dp)),
             contentAlignment = Alignment.CenterStart
         ) {
-            if (isHintUsernameVisible) {
+            if (username.text.isEmpty() || username.text == "") {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -326,7 +326,8 @@ class RegisterActivity : ComponentActivity() {
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = Poppins,
-                        color = ColorGray
+                        color = ColorGray,
+                        baselineShift = BaselineShift(-0.21f)
                     )
                 )
             }
@@ -345,11 +346,11 @@ class RegisterActivity : ComponentActivity() {
                     fontWeight = FontWeight.Medium,
                     fontFamily = Poppins,
                     color = Color.Black,
+                    baselineShift = BaselineShift(-0.21f)
                 ),
                 value = username,
                 onValueChange = {
                     if (it.text.length <= 50) username = it
-                    isHintUsernameVisible = it.text.isEmpty() || it.text == ""
                 },
             )
         }
@@ -358,7 +359,6 @@ class RegisterActivity : ComponentActivity() {
     @Composable
     fun PasswordBox() {
         var password by remember { mutableStateOf(TextFieldValue("")) }
-        var isHintPasswordVisible by remember { mutableStateOf(true) }
         var isPasswordVisible by remember { mutableStateOf(false) }
 
         Box(
@@ -369,7 +369,7 @@ class RegisterActivity : ComponentActivity() {
                 .border(width = 1.dp, color = Color5, shape = RoundedCornerShape(10.dp)),
             contentAlignment = Alignment.CenterStart
         ) {
-            if (isHintPasswordVisible) {
+            if (password.text.isEmpty() || password.text == "") {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -379,7 +379,8 @@ class RegisterActivity : ComponentActivity() {
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = Poppins,
-                        color = ColorGray
+                        color = ColorGray,
+                        baselineShift = BaselineShift(-0.21f)
                     )
                 )
             }
@@ -402,12 +403,12 @@ class RegisterActivity : ComponentActivity() {
                         fontWeight = FontWeight.Medium,
                         fontFamily = Poppins,
                         color = Color.Black,
+                        baselineShift = BaselineShift(-0.21f)
                     ),
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     value = password,
                     onValueChange = {
                         if (it.text.length <= 50) password = it
-                        isHintPasswordVisible = it.text.isEmpty() || it.text == ""
                     },
                 )
                 Image(
@@ -428,7 +429,6 @@ class RegisterActivity : ComponentActivity() {
     @Composable
     fun ConfirmPasswordBox() {
         var confirmPassword by remember { mutableStateOf(TextFieldValue("")) }
-        var isHintConfirmPasswordVisible by remember { mutableStateOf(true) }
         var isConfirmPasswordVisible by remember { mutableStateOf(false) }
 
         Box(
@@ -439,7 +439,7 @@ class RegisterActivity : ComponentActivity() {
                 .border(width = 1.dp, color = Color5, shape = RoundedCornerShape(10.dp)),
             contentAlignment = Alignment.CenterStart
         ) {
-            if (isHintConfirmPasswordVisible) {
+            if (confirmPassword.text.isEmpty() || confirmPassword.text == "") {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -449,7 +449,8 @@ class RegisterActivity : ComponentActivity() {
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = Poppins,
-                        color = ColorGray
+                        color = ColorGray,
+                        baselineShift = BaselineShift(-0.21f)
                     )
                 )
             }
@@ -472,12 +473,12 @@ class RegisterActivity : ComponentActivity() {
                         fontWeight = FontWeight.Medium,
                         fontFamily = Poppins,
                         color = Color.Black,
+                        baselineShift = BaselineShift(-0.21f)
                     ),
                     visualTransformation = if (isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     value = confirmPassword,
                     onValueChange = {
                         if (it.text.length <= 50) confirmPassword = it
-                        isConfirmPasswordVisible = it.text.isEmpty() || it.text == ""
                     },
                 )
                 Image(
@@ -511,6 +512,7 @@ class RegisterActivity : ComponentActivity() {
                         fontFamily = Poppins,
                         fontSize = 14.sp,
                         color = ColorGray,
+                        baselineShift = BaselineShift(-0.21f)
                     )
                 )
                 Text(
@@ -520,7 +522,8 @@ class RegisterActivity : ComponentActivity() {
                         fontFamily = Poppins,
                         fontSize = 16.sp,
                         fontStyle = FontStyle.Italic,
-                        color = Color2
+                        color = Color2,
+                        baselineShift = BaselineShift(-0.21f)
                     )
                 )
                 Spacer(modifier = Modifier.height(21.dp))
