@@ -112,60 +112,67 @@ fun BoxSearch() {
 
 @Composable
 fun BoxTab() {
-    var isSelected by remember { mutableStateOf("1") }
+    var isSelected by remember { mutableStateOf(0) }
 
     Row(modifier = Modifier.fillMaxWidth()) {
         Button(
-            onClick = {},
+            onClick = {
+                isSelected = 0
+            },
             modifier = Modifier
                 .weight(0.333f)
                 .height(29.dp),
             shape = RoundedCornerShape(7.dp),
-            colors = ButtonDefaults.buttonColors(Color2),
+            colors = ButtonDefaults.buttonColors(if (isSelected == 0) Color2 else Color(0xFFE7E7E7)),
         ) {
             Text(
-                text = "All", style = TextStyle(
+                text = "All",
+                style = TextStyle(
                     fontFamily = Poppins,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 9.sp,
-                    color = Color.White,
+                    color = if (isSelected == 0) Color.White else Color.Black,
                     textAlign = TextAlign.Center,
                 ),
             )
         }
         Spacer(modifier = Modifier.width(8.51.dp))
         Button(
-            onClick = {},
+            onClick = {
+                isSelected = 1
+            },
             modifier = Modifier
                 .weight(0.333f)
                 .height(29.dp),
             shape = RoundedCornerShape(7.dp),
-            colors = ButtonDefaults.buttonColors(Color(0xFFE7E7E7)),
+            colors = ButtonDefaults.buttonColors(if (isSelected == 1) Color2 else Color(0xFFE7E7E7)),
         ) {
             Text(
                 text = "Jogging", style = TextStyle(
                     fontFamily = Poppins,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 9.sp,
-                    color = Color.Black
+                    color = if (isSelected == 1) Color.White else Color.Black
                 )
             )
         }
         Spacer(modifier = Modifier.width(8.51.dp))
         Button(
-            onClick = {},
+            onClick = {
+                isSelected = 2
+            },
             modifier = Modifier
                 .weight(0.333f)
                 .height(29.dp),
             shape = RoundedCornerShape(7.dp),
-            colors = ButtonDefaults.buttonColors(Color(0xFFE7E7E7)),
+            colors = ButtonDefaults.buttonColors(if (isSelected == 2) Color2 else Color(0xFFE7E7E7)),
         ) {
             Text(
                 text = "Color run", style = TextStyle(
                     fontFamily = Poppins,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 9.sp,
-                    color = Color.Black
+                    color = if (isSelected == 2) Color.White else Color.Black
                 )
             )
         }

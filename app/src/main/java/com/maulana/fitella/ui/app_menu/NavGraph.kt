@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.maulana.fitella.ui.app_menu.event.EventScreen
 import com.maulana.fitella.ui.app_menu.explore.ExploreScreen
 import com.maulana.fitella.ui.app_menu.home.HomeScreen
 
@@ -25,7 +26,7 @@ fun SetupNavGraph(
         composable(
             route = AppScreen.Event.route
         ) {
-
+            EventScreen()
         }
         composable(
             route = AppScreen.Profile.route

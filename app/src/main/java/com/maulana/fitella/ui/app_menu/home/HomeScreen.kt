@@ -35,7 +35,7 @@ fun HomeScreen() {
                     .fillMaxWidth()
                     .background(Color.White)
                     .padding(10.dp)
-                    .height(57.dp),
+                    .height(40.dp),
             ) {
                 Card(
                     modifier = Modifier
