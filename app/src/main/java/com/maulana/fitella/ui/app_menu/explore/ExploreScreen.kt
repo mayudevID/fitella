@@ -1,17 +1,23 @@
 package com.maulana.fitella.ui.app_menu.explore
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -26,6 +32,26 @@ import com.maulana.fitella.theme.Color2
 import com.maulana.fitella.theme.Color5
 import com.maulana.fitella.theme.Poppins
 
+val dataTemp = listOf(
+    com.maulana.fitella.R.drawable.temp_explore_1,
+    com.maulana.fitella.R.drawable.temp_explore_2,
+    com.maulana.fitella.R.drawable.temp_explore_3,
+    com.maulana.fitella.R.drawable.temp_explore_4,
+    com.maulana.fitella.R.drawable.temp_explore_5,
+    com.maulana.fitella.R.drawable.temp_explore_6,
+    com.maulana.fitella.R.drawable.temp_explore_7,
+    com.maulana.fitella.R.drawable.temp_explore_8,
+    com.maulana.fitella.R.drawable.temp_explore_9,
+    com.maulana.fitella.R.drawable.temp_explore_10,
+    com.maulana.fitella.R.drawable.temp_explore_11,
+    com.maulana.fitella.R.drawable.temp_explore_12,
+    com.maulana.fitella.R.drawable.temp_explore_13,
+    com.maulana.fitella.R.drawable.temp_explore_14,
+    com.maulana.fitella.R.drawable.temp_explore_15,
+)
+
+@Suppress("OPT_IN_IS_NOT_ENABLED")
+@OptIn(ExperimentalFoundationApi::class)
 @Preview(showBackground = true)
 @Composable
 fun ExploreScreen() {
@@ -65,8 +91,29 @@ fun ExploreScreen() {
                     BoxTab()
                 }
             }
-        }
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Fixed(3),
+                contentPadding = PaddingValues(1.dp),
+                horizontalArrangement = Arrangement.spacedBy(1.dp),
+                verticalArrangement = Arrangement.spacedBy(1.dp)
+            ) {
+                items(15) { pos ->
 
+                        Card(
+                            Modifier.fillMaxSize(),
+                            shape = RoundedCornerShape(3.dp),
+                        ) {
+                            Image(
+                                modifier = Modifier.fillMaxSize(),
+                                painter = painterResource(dataTemp[pos]),
+                                contentDescription = "Explore Content",
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+
+                }
+            }
+        }
     }
 }
 
