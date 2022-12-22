@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                    floatingActionButtonPosition = FabPosition.Center,
                    isFloatingActionButtonDocked = true,
                ) {
-                   SetupNavGraph(navController = navController)
+                   SetupNavGraph(navController = navController, activity = this@MainActivity)
                }
            }
         }

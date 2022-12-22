@@ -1,5 +1,6 @@
 package com.maulana.fitella.ui.app_menu
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -10,6 +11,7 @@ import com.maulana.fitella.ui.app_menu.home.HomeScreen
 
 @Composable
 fun SetupNavGraph(
+    activity: Activity,
     navController: NavHostController
 ) {
     NavHost(navController = navController, startDestination = AppScreen.Home.route) {
@@ -26,7 +28,7 @@ fun SetupNavGraph(
         composable(
             route = AppScreen.Event.route
         ) {
-            EventScreen()
+            EventScreen(activity)
         }
         composable(
             route = AppScreen.Profile.route

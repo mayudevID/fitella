@@ -1,9 +1,12 @@
 package com.maulana.fitella.ui.app_menu.event
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -28,7 +31,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -40,6 +42,7 @@ import com.maulana.fitella.R
 import com.maulana.fitella.theme.Color3
 import com.maulana.fitella.theme.Color5
 import com.maulana.fitella.theme.Poppins
+import com.maulana.fitella.ui.event_detail.EventDetailActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
 import kotlin.math.absoluteValue
@@ -62,9 +65,8 @@ val gridTempData = listOf(
     R.drawable.event9,
 )
 
-@Preview(showBackground = true)
 @Composable
-fun EventScreen() {
+fun EventScreen(activity: Activity) {
     Surface {
         Column(Modifier.fillMaxSize()) {
             Box(
@@ -109,7 +111,20 @@ fun EventScreen() {
                 horizontalArrangement = Arrangement.spacedBy(21.dp)
             ) {
                 items(9) { pos ->
-                    Card(Modifier.fillMaxWidth(), elevation = 0.dp) {
+                    Card(
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                activity.startActivity(
+                                    Intent(
+                                        activity,
+                                        EventDetailActivity::class.java
+                                    )
+                                )
+                            },
+                        elevation = 0.dp,
+                        shape = RoundedCornerShape(6.dp)
+                    ) {
                         Column(Modifier.fillMaxWidth()) {
                             Card(
                                 modifier = Modifier
@@ -164,8 +179,7 @@ fun EventScreen() {
                                 )
                             }
                             Text(
-                                text = "Ticket prices start from IDR 50.000, domiciled in Bali."
-                            ,
+                                text = "Ticket prices start from IDR 50.000, domiciled in Bali.",
                                 style = TextStyle(
                                     fontFamily = Poppins,
                                     fontWeight = FontWeight.Light,

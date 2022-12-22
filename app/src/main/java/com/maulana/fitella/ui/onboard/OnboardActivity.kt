@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -151,6 +152,7 @@ class OnboardActivity : ComponentActivity() {
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
                             color = Color.White,
+                            baselineShift = BaselineShift(-0.21f)
                         )
                     )
                     Spacer(modifier = Modifier.width(Dp(8f)))
