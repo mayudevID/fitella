@@ -11,6 +11,7 @@ import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -58,18 +59,30 @@ class EventDetailActivity : ComponentActivity() {
     fun ContentUi() {
         var startAnim by remember { mutableStateOf(false) }
         var whiteSizeState by remember { mutableStateOf(0.dp) }
+        var orangeSizeState by remember { mutableStateOf(500.dp) }
         val whiteSize by animateDpAsState(
             targetValue = whiteSizeState, animationSpec = tween(
-                durationMillis = 500,
+                durationMillis = 450,
+            )
+        )
+        val orangeSize by animateDpAsState(
+            targetValue = orangeSizeState, animationSpec = tween(
+                durationMillis = 450
             )
         )
 
+        val backFromPage: () -> Unit = {
+            orangeSizeState -= 70.dp
+            whiteSizeState -= 560.dp
+            Handler(Looper.getMainLooper()).postDelayed(
+                {
+                    finish()
+                }, 100)
+        }
+
         BackHandler(
             enabled = true,
-            onBack = {
-                whiteSizeState -= 560.dp
-                Handler(Looper.getMainLooper()).postDelayed({ finish() }, 250)
-            }
+            onBack = backFromPage
         )
         Box(Modifier.fillMaxSize()) {
             Image(
@@ -80,10 +93,17 @@ class EventDetailActivity : ComponentActivity() {
                 contentScale = ContentScale.Crop,
                 contentDescription = "Event Image"
             )
+            Image(
+                modifier = Modifier.padding(
+                    top = 38.dp, start = 30.dp
+                ).size(7.dp,14.dp).clickable(onClick = backFromPage),
+                imageVector = ImageVector.vectorResource(R.drawable.back),
+                contentDescription = "Back"
+            )
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(570.dp)
+                    .height(orangeSize)
                     .align(Alignment.BottomCenter),
                 shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
                 backgroundColor = Color2
@@ -238,6 +258,7 @@ class EventDetailActivity : ComponentActivity() {
         }
 
         if (!startAnim) {
+            orangeSizeState += 70.dp
             whiteSizeState += 506.dp
             startAnim = true
         }
@@ -246,7 +267,6 @@ class EventDetailActivity : ComponentActivity() {
 
 @Composable
 fun TitleAndDescription(textA: String, textB: String) {
-
     Text(
         text = textA, style = TextStyle(
             fontFamily = Poppins,

@@ -75,7 +75,7 @@ class RegisterActivity : ComponentActivity() {
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                modifier = Modifier.size(Dp(171f), Dp(166f)),
+                modifier = Modifier.size(Dp(171f), Dp(128f)),
                 painter = painterResource(R.drawable.register_frame),
                 contentDescription = "Register Frame"
             )
@@ -87,15 +87,15 @@ class RegisterActivity : ComponentActivity() {
                     color = Color2
                 )
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             EmailBox()
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(14.dp))
             NameBox()
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(14.dp))
             UsernameBox()
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(14.dp))
             PasswordBox()
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(14.dp))
             ConfirmPasswordBox()
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -195,8 +195,7 @@ class RegisterActivity : ComponentActivity() {
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(90.dp))
-
+            Spacer(modifier = Modifier.height(48.dp))
         }
     }
 
@@ -516,6 +515,9 @@ class RegisterActivity : ComponentActivity() {
                     )
                 )
                 Text(
+                    modifier = Modifier.clickable {
+                        finish()
+                    },
                     text = "Login.",
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,

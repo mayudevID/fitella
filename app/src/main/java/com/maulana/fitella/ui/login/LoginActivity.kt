@@ -92,7 +92,7 @@ class LoginActivity : ComponentActivity() {
             EmailBox()
             Spacer(modifier = Modifier.height(Dp(32f)))
             PasswordBox()
-            Spacer(modifier = Modifier.height(Dp(8f)))
+            Spacer(modifier = Modifier.height(Dp(20f)))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
