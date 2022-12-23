@@ -11,7 +11,7 @@ import com.maulana.fitella.ui.app_menu.home.HomeScreen
 
 @Composable
 fun SetupNavGraph(
-    activity: Activity,
+    activity: MainActivity,
     navController: NavHostController
 ) {
     NavHost(navController = navController, startDestination = AppScreen.Home.route) {

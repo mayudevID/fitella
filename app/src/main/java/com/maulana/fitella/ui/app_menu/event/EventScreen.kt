@@ -42,6 +42,7 @@ import com.maulana.fitella.R
 import com.maulana.fitella.theme.Color3
 import com.maulana.fitella.theme.Color5
 import com.maulana.fitella.theme.Poppins
+import com.maulana.fitella.ui.app_menu.MainActivity
 import com.maulana.fitella.ui.event_detail.EventDetailActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
@@ -66,7 +67,7 @@ val gridTempData = listOf(
 )
 
 @Composable
-fun EventScreen(activity: Activity) {
+fun EventScreen(activity: MainActivity) {
     Surface {
         Column(Modifier.fillMaxSize()) {
             Box(
