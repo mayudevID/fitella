@@ -1,5 +1,6 @@
 package com.maulana.fitella.ui.app_menu.profile
 
+import android.provider.ContactsContract.Profile
 import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -7,7 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -24,9 +25,13 @@ import com.maulana.fitella.R
 import com.maulana.fitella.theme.Color2
 import com.maulana.fitella.theme.Poppins
 
+enum class ProfileTab { PhotoActivity, Settings, Saved, Report }
+
 @Preview(showBackground = true)
 @Composable
 fun ProfileScreen() {
+    var selectedProfileTab by remember { mutableStateOf(ProfileTab.PhotoActivity) }
+
     Surface() {
         Box(Modifier.fillMaxSize()) {
             Image(
@@ -43,7 +48,7 @@ fun ProfileScreen() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.height(24.dp))
                 Box(Modifier.fillMaxWidth()) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
@@ -92,7 +97,7 @@ fun ProfileScreen() {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(585.dp)
+                    .height(525.dp)
                     .align(Alignment.BottomCenter),
                 shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
                 backgroundColor = Color2
@@ -101,13 +106,16 @@ fun ProfileScreen() {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(525.dp)
+                    .height(465.dp)
                     .align(Alignment.BottomCenter),
                 shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
                 backgroundColor = Color.White
             ) {
-                Column(Modifier.fillMaxWidth()) {
-                    
+                when (selectedProfileTab) {
+                    ProfileTab.PhotoActivity -> PhotoActivityScreen()
+                    ProfileTab.Settings -> PhotoActivityScreen()
+                    ProfileTab.Saved -> PhotoActivityScreen()
+                    ProfileTab.Report ->  PhotoActivityScreen()
                 }
             }
         }
