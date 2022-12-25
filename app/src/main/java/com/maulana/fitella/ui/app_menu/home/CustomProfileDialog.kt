@@ -42,7 +42,7 @@ fun CustomProfileDialog(setShowDialog: (Boolean) -> Unit) {
 }
 
 @Composable
-fun CustomDialogUI(modifier: Modifier = Modifier, setShowDialog: (Boolean) -> Unit) {
+fun CustomDialogUI(setShowDialog: (Boolean) -> Unit) {
     Card(
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier.size(160.dp, 120.dp),

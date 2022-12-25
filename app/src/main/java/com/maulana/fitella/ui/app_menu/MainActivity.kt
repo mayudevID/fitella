@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
@@ -15,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
@@ -31,9 +35,23 @@ class MainActivity : ComponentActivity() {
             FitellaTheme(this, darkTheme = false) {
                 val navController = rememberNavController()
                 val showDialog = remember { mutableStateOf(false) }
+                var rotateValue by remember {
+                    mutableStateOf(0f)
+                }
+                val rotateValueState by animateFloatAsState(
+                    targetValue = rotateValue, animationSpec = tween(
+                        durationMillis = 500
+                    )
+                )
 
                 if (showDialog.value) {
                     CustomProfileDialog(setShowDialog = { showDialog.value = it })
+                }
+
+                rotateValue = if (showDialog.value) {
+                    45f
+                } else {
+                    0f
                 }
 
                 Scaffold(
@@ -48,7 +66,11 @@ class MainActivity : ComponentActivity() {
                             backgroundColor = Color2,
                             content = {
                                 Icon(
-                                    modifier = Modifier.size(22.dp),
+                                    modifier = Modifier
+                                        .size(22.dp)
+                                        .graphicsLayer {
+                                            rotationZ = rotateValueState
+                                        },
                                     painter = painterResource(R.drawable.add),
                                     contentDescription = "Create",
                                     tint = Color.White

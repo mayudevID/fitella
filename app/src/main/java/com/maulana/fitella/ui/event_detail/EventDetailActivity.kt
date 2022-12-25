@@ -60,22 +60,22 @@ class EventDetailActivity : ComponentActivity() {
     @Composable
     fun ContentUi() {
         var startAnim by remember { mutableStateOf(false) }
-        var whiteSizeState by remember { mutableStateOf(0.dp) }
-        var orangeSizeState by remember { mutableStateOf(500.dp) }
-        val whiteSize by animateDpAsState(
-            targetValue = whiteSizeState, animationSpec = tween(
+        var whiteSize by remember { mutableStateOf(0.dp) }
+        var orangeSize by remember { mutableStateOf(500.dp) }
+        val whiteSizeState by animateDpAsState(
+            targetValue = whiteSize, animationSpec = tween(
                 durationMillis = 450,
             )
         )
-        val orangeSize by animateDpAsState(
-            targetValue = orangeSizeState, animationSpec = tween(
+        val orangeSizeState by animateDpAsState(
+            targetValue = orangeSize, animationSpec = tween(
                 durationMillis = 450
             )
         )
 
         val backFromPage: () -> Unit = {
-            orangeSizeState -= 70.dp
-            whiteSizeState -= 560.dp
+            orangeSize -= 70.dp
+            whiteSize -= 560.dp
             Handler(Looper.getMainLooper()).postDelayed(
                 {
                     finish()
@@ -105,7 +105,7 @@ class EventDetailActivity : ComponentActivity() {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(orangeSize)
+                    .height(orangeSizeState)
                     .align(Alignment.BottomCenter),
                 shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
                 backgroundColor = Color2
@@ -173,7 +173,7 @@ class EventDetailActivity : ComponentActivity() {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(whiteSize)
+                    .height(whiteSizeState)
                     .align(Alignment.BottomCenter),
                 shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
                 backgroundColor = Color.White
@@ -260,8 +260,8 @@ class EventDetailActivity : ComponentActivity() {
         }
 
         if (!startAnim) {
-            orangeSizeState += 70.dp
-            whiteSizeState += 506.dp
+            orangeSize += 70.dp
+            whiteSize += 506.dp
             startAnim = true
         }
     }
