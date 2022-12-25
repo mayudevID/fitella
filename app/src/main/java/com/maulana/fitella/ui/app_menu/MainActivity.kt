@@ -9,6 +9,10 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -17,38 +21,47 @@ import androidx.navigation.compose.rememberNavController
 import com.maulana.fitella.R
 import com.maulana.fitella.theme.Color2
 import com.maulana.fitella.theme.FitellaTheme
+import com.maulana.fitella.ui.app_menu.home.CustomProfileDialog
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-           FitellaTheme(this, darkTheme = false) {
-               val navController = rememberNavController()
-               Scaffold(
-                   bottomBar = {
-                       BottomBar(navController = navController)
-                   },
-                   floatingActionButton = {
-                       FloatingActionButton(
-                           onClick = { },
-                           backgroundColor = Color2,
-                           content = {
-                               Icon(
-                                   modifier = Modifier.size(22.dp),
-                                   painter = painterResource(R.drawable.add),
-                                   contentDescription = "Create",
-                                   tint = Color.White
-                               )
-                           }
-                       )
-                   },
-                   floatingActionButtonPosition = FabPosition.Center,
-                   isFloatingActionButtonDocked = true,
-               ) {
-                   SetupNavGraph(navController = navController, activity = this@MainActivity)
-               }
-           }
+            FitellaTheme(this, darkTheme = false) {
+                val navController = rememberNavController()
+                val showDialog = remember { mutableStateOf(false) }
+
+                if (showDialog.value) {
+                    CustomProfileDialog(setShowDialog = { showDialog.value = it })
+                }
+
+                Scaffold(
+                    bottomBar = {
+                        BottomBar(navController = navController)
+                    },
+                    floatingActionButton = {
+                        FloatingActionButton(
+                            onClick = {
+                                showDialog.value = !showDialog.value
+                            },
+                            backgroundColor = Color2,
+                            content = {
+                                Icon(
+                                    modifier = Modifier.size(22.dp),
+                                    painter = painterResource(R.drawable.add),
+                                    contentDescription = "Create",
+                                    tint = Color.White
+                                )
+                            }
+                        )
+                    },
+                    floatingActionButtonPosition = FabPosition.Center,
+                    isFloatingActionButtonDocked = true,
+                ) {
+                    SetupNavGraph(navController = navController, activity = this@MainActivity)
+                }
+            }
         }
     }
 }
