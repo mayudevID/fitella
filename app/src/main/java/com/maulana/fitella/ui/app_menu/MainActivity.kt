@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.size
@@ -25,7 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import com.maulana.fitella.R
 import com.maulana.fitella.theme.Color2
 import com.maulana.fitella.theme.FitellaTheme
-import com.maulana.fitella.ui.app_menu.home.CustomProfileDialog
+import com.maulana.fitella.ui.app_menu.widget.CustomMainActivityPopup
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -45,7 +44,7 @@ class MainActivity : ComponentActivity() {
                 )
 
                 if (showDialog.value) {
-                    CustomProfileDialog(setShowDialog = { showDialog.value = it })
+                    CustomMainActivityPopup(setShowDialog = { showDialog.value = it })
                 }
 
                 rotateValue = if (showDialog.value) {

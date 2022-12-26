@@ -1,17 +1,14 @@
-package com.maulana.fitella.ui.app_menu.home
+package com.maulana.fitella.ui.app_menu.widget
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,24 +22,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import com.maulana.fitella.theme.Color1
 import com.maulana.fitella.theme.Poppins
 
 @Composable
-fun CustomProfileDialog(setShowDialog: (Boolean) -> Unit) {
+fun CustomMainActivityPopup(setShowDialog: (Boolean) -> Unit) {
     Popup(
         alignment = Alignment.BottomCenter,
         offset = IntOffset(x = 0,y = -256),
     ) {
-        CustomDialogUI(setShowDialog = setShowDialog)
+        CustomMainActivityPopupUI(setShowDialog = setShowDialog)
     }
 }
 
 @Composable
-fun CustomDialogUI(setShowDialog: (Boolean) -> Unit) {
+fun CustomMainActivityPopupUI(setShowDialog: (Boolean) -> Unit) {
     Card(
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier.size(160.dp, 120.dp),
@@ -131,5 +127,5 @@ fun CustomDialogUI(setShowDialog: (Boolean) -> Unit) {
 fun MyDialogUIPreview() {
     val showDialog = remember { mutableStateOf(false) }
 
-    CustomProfileDialog(setShowDialog = { showDialog.value = it })
+    CustomMainActivityPopup(setShowDialog = { showDialog.value = it })
 }

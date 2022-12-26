@@ -3,6 +3,7 @@ package com.maulana.fitella.ui.app_menu.profile
 import android.provider.ContactsContract.Profile
 import android.widget.Space
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -13,8 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,7 +52,7 @@ fun ProfileScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
-                Box(Modifier.fillMaxWidth()) {
+                Box(Modifier.fillMaxWidth().padding(horizontal = 24.dp)) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         text = "kahfa.gaming", style = TextStyle(
@@ -59,6 +62,13 @@ fun ProfileScreen() {
                             color = Color.White,
                             textAlign = TextAlign.Center,
                         )
+                    )
+                    Image(
+                        modifier = Modifier.align(Alignment.CenterEnd).clickable {
+
+                        },
+                        imageVector = ImageVector.vectorResource(R.drawable.profile_pick),
+                        contentDescription = null
                     )
                 }
                 Spacer(modifier = Modifier.height(11.dp))
