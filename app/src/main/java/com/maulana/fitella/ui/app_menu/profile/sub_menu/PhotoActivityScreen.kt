@@ -1,4 +1,4 @@
-package com.maulana.fitella.ui.app_menu.profile
+package com.maulana.fitella.ui.app_menu.profile.sub_menu
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

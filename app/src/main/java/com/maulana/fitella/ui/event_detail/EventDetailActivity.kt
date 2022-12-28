@@ -9,11 +9,14 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -38,9 +41,6 @@ import com.maulana.fitella.theme.FitellaTheme
 import com.maulana.fitella.theme.Poppins
 
 class EventDetailActivity : ComponentActivity() {
-
-    val apaan: String = ""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,27 +59,32 @@ class EventDetailActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun ContentUi() {
-        var startAnim by remember { mutableStateOf(false) }
-        var whiteSize by remember { mutableStateOf(0.dp) }
-        var orangeSize by remember { mutableStateOf(500.dp) }
-        val whiteSizeState by animateDpAsState(
+        var whiteSize by remember { mutableStateOf(0f) }
+        var orangeSize by remember { mutableStateOf(0.6f) }
+        val whiteSizeState by animateFloatAsState(
             targetValue = whiteSize, animationSpec = tween(
                 durationMillis = 450,
             )
         )
-        val orangeSizeState by animateDpAsState(
+        val orangeSizeState by animateFloatAsState(
             targetValue = orangeSize, animationSpec = tween(
                 durationMillis = 450
             )
         )
 
         val backFromPage: () -> Unit = {
-            orangeSize -= 70.dp
-            whiteSize -= 560.dp
+            whiteSize = 0f
+            orangeSize = 0.6f
             Handler(Looper.getMainLooper()).postDelayed(
                 {
                     finish()
-                }, 100)
+                }, 250
+            )
+        }
+
+        LaunchedEffect(true) {
+            orangeSize = 0.6773399f
+            whiteSize = 0.5985222f
         }
 
         BackHandler(
@@ -90,90 +95,95 @@ class EventDetailActivity : ComponentActivity() {
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(317.11.dp),
+                    .fillMaxHeight(0.45f),
                 painter = painterResource(R.drawable.temp_event_detail),
                 contentScale = ContentScale.Crop,
                 contentDescription = "Event Image"
             )
             Image(
-                modifier = Modifier.padding(
-                    top = 38.dp, start = 30.dp
-                ).size(7.dp,14.dp).clickable(onClick = backFromPage),
+                modifier = Modifier
+                    .padding(
+                        top = 38.dp, start = 30.dp
+                    )
+                    .size(7.dp, 14.dp)
+                    .clickable(onClick = backFromPage),
                 imageVector = ImageVector.vectorResource(R.drawable.back),
                 contentDescription = "Back"
             )
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(orangeSizeState)
+                    .fillMaxHeight(orangeSizeState)
                     .align(Alignment.BottomCenter),
                 shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
                 backgroundColor = Color2
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 31.dp, vertical = 7.dp),
-                ) {
-                    Image(
-                        modifier = Modifier.size(50.dp),
-                        painter = painterResource(R.drawable.temp_profile_event),
-                        contentDescription = "Profile Event"
-                    )
-                    Spacer(modifier = Modifier.width(7.dp))
-                    Column(
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Row(
                         modifier = Modifier
-                            .weight(1f)
-                            .height(50.dp),
-                        verticalArrangement = Arrangement.SpaceAround
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.11636364f)
+                            .padding(horizontal = 31.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "Sport Universe",
-                            style = TextStyle(
-                                fontFamily = Poppins,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            )
+                        Image(
+                            modifier = Modifier
+                                .fillMaxHeight(0.75f).fillMaxWidth(0.15f),
+                            painter = painterResource(R.drawable.temp_profile_event),
+                            contentDescription = "Profile Event"
                         )
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
+                        Spacer(modifier = Modifier.width(7.dp))
+                        Column(
+                            verticalArrangement = Arrangement.SpaceAround
                         ) {
-                            Image(
-                                imageVector = ImageVector.vectorResource(R.drawable.star_event),
-                                contentDescription = "Star Event"
-                            )
-                            Spacer(modifier = Modifier.width(7.dp))
                             Text(
-                                text = "(4.8)", style = TextStyle(
+                                text = "Sport Universe",
+                                style = TextStyle(
                                     fontFamily = Poppins,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Light,
-                                    color = Color.White,
-                                    baselineShift = BaselineShift(-0.21f)
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
                                 )
                             )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Image(
+                                    imageVector = ImageVector.vectorResource(R.drawable.star_event),
+                                    contentDescription = "Star Event"
+                                )
+                                Text(
+                                    text = "(4.8)", style = TextStyle(
+                                        fontFamily = Poppins,
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Light,
+                                        color = Color.White,
+                                        baselineShift = BaselineShift(-0.21f)
+                                    )
+                                )
+                            }
                         }
-                    }
-                    Row(Modifier.padding(8.dp)) {
-                        Image(
-                            ImageVector.vectorResource(R.drawable.share_event),
-                            modifier = Modifier.size(12.dp),
-                            contentDescription = "Share Button"
-                        )
-                        Spacer(modifier = Modifier.width(13.dp))
-                        Image(
-                            ImageVector.vectorResource(R.drawable.save_event),
-                            modifier = Modifier.size(12.dp),
-                            contentDescription = "Share Button"
-                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Row(Modifier.padding(8.dp)) {
+                            Image(
+                                ImageVector.vectorResource(R.drawable.share_event),
+                                modifier = Modifier.size(12.dp),
+                                contentDescription = "Share Button"
+                            )
+                            Spacer(modifier = Modifier.width(13.dp))
+                            Image(
+                                ImageVector.vectorResource(R.drawable.save_event),
+                                modifier = Modifier.size(12.dp),
+                                contentDescription = "Share Button"
+                            )
+                        }
                     }
                 }
             }
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(whiteSizeState)
+                    .fillMaxHeight(whiteSizeState)
                     .align(Alignment.BottomCenter),
                 shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
                 backgroundColor = Color.White
@@ -257,12 +267,6 @@ class EventDetailActivity : ComponentActivity() {
                     }
                 }
             }
-        }
-
-        if (!startAnim) {
-            orangeSize += 70.dp
-            whiteSize += 506.dp
-            startAnim = true
         }
     }
 }

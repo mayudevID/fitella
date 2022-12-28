@@ -76,7 +76,7 @@ class LoginActivity : ComponentActivity() {
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                modifier = Modifier.size(Dp(226.34f), Dp(233f)),
+                modifier = Modifier.width(Dp(175f)),
                 painter = painterResource(R.drawable.login_frame),
                 contentDescription = "Login Frame"
             )
@@ -88,11 +88,11 @@ class LoginActivity : ComponentActivity() {
                     color = Color2
                 )
             )
-            Spacer(modifier = Modifier.height(Dp(32f)))
+            Spacer(modifier = Modifier.height(Dp(24f)))
             EmailBox()
-            Spacer(modifier = Modifier.height(Dp(32f)))
+            Spacer(modifier = Modifier.height(Dp(16f)))
             PasswordBox()
-            Spacer(modifier = Modifier.height(Dp(20f)))
+            Spacer(modifier = Modifier.height(Dp(8f)))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -125,7 +125,7 @@ class LoginActivity : ComponentActivity() {
                     ),
                 )
             }
-            Spacer(modifier = Modifier.height(43.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             Button(shape = RoundedCornerShape(100),
                 modifier = Modifier
                     .size(Dp(218f), Dp(40f))
@@ -185,7 +185,6 @@ class LoginActivity : ComponentActivity() {
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(120.dp))
         }
     }
 

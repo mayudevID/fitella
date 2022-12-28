@@ -87,15 +87,15 @@ class RegisterActivity : ComponentActivity() {
                     color = Color2
                 )
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             EmailBox()
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             NameBox()
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             UsernameBox()
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             PasswordBox()
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             ConfirmPasswordBox()
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -115,6 +115,7 @@ class RegisterActivity : ComponentActivity() {
                         fontWeight = FontWeight.Normal,
                         fontSize = 12.sp,
                         color = ColorGray,
+                        baselineShift = BaselineShift(-0.21f)
                     )
                 )
                 Text(
@@ -124,10 +125,11 @@ class RegisterActivity : ComponentActivity() {
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
                         color = ColorGray,
+                        baselineShift = BaselineShift(-0.21f)
                     )
                 )
             }
-            Spacer(modifier = Modifier.height(18.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Button(
                 shape = RoundedCornerShape(100),
                 modifier = Modifier
@@ -154,7 +156,7 @@ class RegisterActivity : ComponentActivity() {
                     )
                 )
             }
-            Spacer(modifier = Modifier.height(18.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "Or", style = TextStyle(
                     fontFamily = Poppins,
