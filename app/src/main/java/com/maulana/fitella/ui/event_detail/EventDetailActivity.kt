@@ -128,7 +128,8 @@ class EventDetailActivity : ComponentActivity() {
                     ) {
                         Image(
                             modifier = Modifier
-                                .fillMaxHeight(0.75f).fillMaxWidth(0.15f),
+                                .fillMaxHeight(0.75f)
+                                .fillMaxWidth(0.15f),
                             painter = painterResource(R.drawable.temp_profile_event),
                             contentDescription = "Profile Event"
                         )
@@ -191,9 +192,10 @@ class EventDetailActivity : ComponentActivity() {
                 Column(
                     Modifier
                         .fillMaxSize()
-                        .padding(start = 30.dp, end = 30.dp, top = 23.dp)
+                        .padding(start = 30.dp, end = 30.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    //Spacer(modifier = Modifier.height(23.dp))
+                    Spacer(modifier = Modifier.height(23.dp))
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         text = "Detail Event",
@@ -265,6 +267,7 @@ class EventDetailActivity : ComponentActivity() {
                             }
                         }
                     }
+                    Spacer(modifier = Modifier.height(23.dp))
                 }
             }
         }

@@ -145,7 +145,7 @@ class LoginActivity : ComponentActivity() {
                     text = "LOGIN", style = TextStyle(
                         fontFamily = Poppins,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         color = Color.White,
                     )
                 )

@@ -11,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -173,6 +174,72 @@ fun ProfileScreen() {
                 shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
                 backgroundColor = Color2
             ) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.1119403f).graphicsLayer {
+                                alpha = profileAlphaValue
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Column(
+                            verticalArrangement = Arrangement.SpaceAround,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Followers",
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.White
+                                )
+                            )
+                            Text(
+                                text = "1.000",
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color.White
+                                )
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Divider(
+                            color = Color.White,
+                            modifier = Modifier
+                                .fillMaxHeight(0.6035f)  //fill the max height
+                                .width(1.dp)
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Column(
+                            verticalArrangement = Arrangement.SpaceAround,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Following",
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.White
+                                )
+                            )
+                            Text(
+                                text = "2",
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color.White
+                                )
+                            )
+                        }
+                    }
+                }
             }
             Card(
                 modifier = Modifier
@@ -182,8 +249,7 @@ fun ProfileScreen() {
                 shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
                 backgroundColor = Color.White
             ) {
-                AnimatedContent(targetState = selectedProfileTab) {
-                    targetState ->
+                AnimatedContent(targetState = selectedProfileTab) { targetState ->
                     when (targetState) {
                         ProfileTab.PhotoActivity -> PhotoActivityScreen()
                         ProfileTab.Settings -> SettingsScreen(
