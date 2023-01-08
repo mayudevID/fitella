@@ -34,6 +34,8 @@ import com.maulana.fitella.R
 import com.maulana.fitella.theme.Color2
 import com.maulana.fitella.theme.Poppins
 import com.maulana.fitella.ui.app_menu.profile.sub_menu.PhotoActivityScreen
+import com.maulana.fitella.ui.app_menu.profile.sub_menu.ReportScreen
+import com.maulana.fitella.ui.app_menu.profile.sub_menu.SavedEventScreen
 import com.maulana.fitella.ui.app_menu.profile.sub_menu.SettingsScreen
 import com.maulana.fitella.ui.app_menu.widget.CustomProfilePickPopup
 
@@ -74,8 +76,7 @@ fun ProfileScreen() {
     )
 
     if (showDialog.value) {
-        CustomProfilePickPopup(
-            setShowDialog = { showDialog.value = it },
+        CustomProfilePickPopup(setShowDialog = { showDialog.value = it },
             cardOrange = { cardOrangeValue = it },
             cardWhite = { cardWhiteValue = it },
             profileAlpha = { profileAlphaValue = it },
@@ -113,7 +114,8 @@ fun ProfileScreen() {
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "kahfa.gaming", style = TextStyle(
+                        text = "kahfa.gaming",
+                        style = TextStyle(
                             fontFamily = Poppins,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 12.sp,
@@ -178,7 +180,8 @@ fun ProfileScreen() {
                     Row(
                         Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(0.1119403f).graphicsLayer {
+                            .fillMaxHeight(0.1119403f)
+                            .graphicsLayer {
                                 alpha = profileAlphaValue
                             },
                         verticalAlignment = Alignment.CenterVertically,
@@ -189,8 +192,7 @@ fun ProfileScreen() {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Followers",
-                                style = TextStyle(
+                                text = "Followers", style = TextStyle(
                                     fontFamily = Poppins,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.SemiBold,
@@ -198,8 +200,7 @@ fun ProfileScreen() {
                                 )
                             )
                             Text(
-                                text = "1.000",
-                                style = TextStyle(
+                                text = "1.000", style = TextStyle(
                                     fontFamily = Poppins,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Medium,
@@ -220,8 +221,7 @@ fun ProfileScreen() {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Following",
-                                style = TextStyle(
+                                text = "Following", style = TextStyle(
                                     fontFamily = Poppins,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.SemiBold,
@@ -229,8 +229,7 @@ fun ProfileScreen() {
                                 )
                             )
                             Text(
-                                text = "2",
-                                style = TextStyle(
+                                text = "2", style = TextStyle(
                                     fontFamily = Poppins,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Medium,
@@ -252,11 +251,13 @@ fun ProfileScreen() {
                 AnimatedContent(targetState = selectedProfileTab) { targetState ->
                     when (targetState) {
                         ProfileTab.PhotoActivity -> PhotoActivityScreen()
-                        ProfileTab.Settings -> SettingsScreen(
-                            setShowDialog = { showDialog.value = it }
-                        )
-                        ProfileTab.Saved -> null
-                        ProfileTab.Report -> null
+                        ProfileTab.Settings -> SettingsScreen(setShowDialog = {
+                            showDialog.value = it
+                        })
+                        ProfileTab.Saved -> SavedEventScreen(setShowDialog = {
+                            showDialog.value = it
+                        })
+                        ProfileTab.Report -> ReportScreen(setShowDialog = { showDialog.value = it })
                     }
                 }
             }

@@ -5,4 +5,5 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_event_detail">EventDetailActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_record_run">RecordRunActivity</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.maulana.fitella.ui.app_menu.widget
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,22 +24,23 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
 import com.maulana.fitella.theme.Color1
 import com.maulana.fitella.theme.Poppins
+import com.maulana.fitella.ui.app_menu.MainActivity
+import com.maulana.fitella.ui.record_run.RecordRunActivity
 
 @Composable
-fun CustomMainActivityPopup(setShowDialog: (Boolean) -> Unit) {
+fun CustomMainActivityPopup(activity: MainActivity, setShowDialog: (Boolean) -> Unit) {
     Popup(
         alignment = Alignment.BottomCenter,
         offset = IntOffset(x = 0,y = -256),
     ) {
-        CustomMainActivityPopupUI(setShowDialog = setShowDialog)
+        CustomMainActivityPopupUI(activity = activity, setShowDialog = setShowDialog)
     }
 }
 
 @Composable
-fun CustomMainActivityPopupUI(setShowDialog: (Boolean) -> Unit) {
+fun CustomMainActivityPopupUI(activity: MainActivity, setShowDialog: (Boolean) -> Unit) {
     Card(
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier.size(160.dp, 120.dp),
@@ -78,6 +80,12 @@ fun CustomMainActivityPopupUI(setShowDialog: (Boolean) -> Unit) {
                     .padding(horizontal = 16.dp)
                     .clickable {
                         setShowDialog(false)
+                        activity.startActivity(
+                            Intent(
+                                activity,
+                                RecordRunActivity::class.java
+                            )
+                        )
                     }, verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "Run", style = TextStyle(
@@ -127,5 +135,5 @@ fun CustomMainActivityPopupUI(setShowDialog: (Boolean) -> Unit) {
 fun MyDialogUIPreview() {
     val showDialog = remember { mutableStateOf(false) }
 
-    CustomMainActivityPopup(setShowDialog = { showDialog.value = it })
+    CustomMainActivityPopup(activity = MainActivity(), setShowDialog = { showDialog.value = it })
 }

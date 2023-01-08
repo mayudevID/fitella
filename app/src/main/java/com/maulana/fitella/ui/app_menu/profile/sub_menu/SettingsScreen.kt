@@ -2,9 +2,7 @@ package com.maulana.fitella.ui.app_menu.profile.sub_menu
 
 import android.app.Dialog
 import android.content.Intent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -28,10 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maulana.fitella.R
 import com.maulana.fitella.theme.Color2
-import com.maulana.fitella.theme.Color5
 import com.maulana.fitella.theme.Poppins
-import com.maulana.fitella.ui.app_menu.MainActivity
-import com.maulana.fitella.ui.app_menu.profile.ProfileTab
 
 @Composable
 fun SettingsScreen(
@@ -42,6 +37,7 @@ fun SettingsScreen(
             .background(Color.White)
             .fillMaxSize()
             .padding(horizontal = 16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(24.dp))
         Row(Modifier.padding(horizontal = 8.dp)) {
@@ -279,7 +275,8 @@ fun SettingsScreen(
                         elevation = 7.dp,
                         ambientColor = Color(0xFFE22020),
                         spotColor = Color(0xFFE22020)
-                    ).align(Alignment.Center),
+                    )
+                    .align(Alignment.Center),
                 elevation = ButtonDefaults.elevation(0.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE22020)),
                 onClick = {

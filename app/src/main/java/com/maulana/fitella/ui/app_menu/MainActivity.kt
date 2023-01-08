@@ -44,7 +44,10 @@ class MainActivity : ComponentActivity() {
                 )
 
                 if (showDialog.value) {
-                    CustomMainActivityPopup(setShowDialog = { showDialog.value = it })
+                    CustomMainActivityPopup(
+                        activity = this@MainActivity,
+                        setShowDialog = { showDialog.value = it },
+                    )
                 }
 
                 rotateValue = if (showDialog.value) {

@@ -72,6 +72,7 @@ fun CustomProfilePickPopupPUI(
                 .padding(horizontal = 16.dp, vertical = 5.dp),
             horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.SpaceAround
         ) {
+            //Photo Activity
             Text(
                 modifier = Modifier.clickable {
                     setShowDialog(false)
@@ -90,6 +91,7 @@ fun CustomProfilePickPopupPUI(
                     color = if (profileTab == ProfileTab.PhotoActivity) Color.Black else Color2
                 )
             )
+            //Settings Activity
             Text(
                 modifier = Modifier.clickable {
                     setShowDialog(false)
@@ -107,22 +109,40 @@ fun CustomProfilePickPopupPUI(
                     color = if (profileTab == ProfileTab.Settings) Color.Black else Color2
                 )
             )
+            //Saved Activity
             Text(
-                modifier = Modifier.clickable { },
+                modifier = Modifier.clickable {
+                    setShowDialog(false)
+                    if (profileTab == ProfileTab.PhotoActivity) {
+                        cardOrange(0.98f)
+                        cardWhite(0.96f)
+                        profileAlpha(0f)
+                    }
+                    selectedProfileTab(ProfileTab.Saved)
+                },
                 text = "Saved", style = TextStyle(
                     fontFamily = Poppins,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color2
+                    color = if (profileTab == ProfileTab.Saved) Color.Black else Color2
                 )
             )
+            //Report Activity
             Text(
-                modifier = Modifier.clickable { },
+                modifier = Modifier.clickable {
+                    setShowDialog(false)
+                    if (profileTab == ProfileTab.PhotoActivity) {
+                        cardOrange(0.98f)
+                        cardWhite(0.96f)
+                        profileAlpha(0f)
+                    }
+                    selectedProfileTab(ProfileTab.Report)
+                },
                 text = "Report", style = TextStyle(
                     fontFamily = Poppins,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color2
+                    color = if (profileTab == ProfileTab.Report) Color.Black else Color2
                 )
             )
         }
