@@ -99,8 +99,15 @@ fun CustomProfilePickPopupPUI(
                         cardOrange(0.98f)
                         cardWhite(0.96f)
                         profileAlpha(0f)
+                        Handler(Looper.getMainLooper()).postDelayed(
+                            {
+                                selectedProfileTab(ProfileTab.Settings)
+                            },
+                            240
+                        )
+                    } else {
+                        selectedProfileTab(ProfileTab.Settings)
                     }
-                    selectedProfileTab(ProfileTab.Settings)
                 },
                 text = "Settings", style = TextStyle(
                     fontFamily = Poppins,
@@ -117,8 +124,15 @@ fun CustomProfilePickPopupPUI(
                         cardOrange(0.98f)
                         cardWhite(0.96f)
                         profileAlpha(0f)
+                        Handler(Looper.getMainLooper()).postDelayed(
+                            {
+                                selectedProfileTab(ProfileTab.Saved)
+                            },
+                            240
+                        )
+                    } else {
+                        selectedProfileTab(ProfileTab.Saved)
                     }
-                    selectedProfileTab(ProfileTab.Saved)
                 },
                 text = "Saved", style = TextStyle(
                     fontFamily = Poppins,
@@ -135,8 +149,15 @@ fun CustomProfilePickPopupPUI(
                         cardOrange(0.98f)
                         cardWhite(0.96f)
                         profileAlpha(0f)
+                        Handler(Looper.getMainLooper()).postDelayed(
+                            {
+                                selectedProfileTab(ProfileTab.Report)
+                            },
+                            240
+                        )
+                    } else {
+                        selectedProfileTab(ProfileTab.Report)
                     }
-                    selectedProfileTab(ProfileTab.Report)
                 },
                 text = "Report", style = TextStyle(
                     fontFamily = Poppins,

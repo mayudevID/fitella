@@ -22,13 +22,6 @@
         android:theme="@style/Theme.Fitella"
         tools:targetApi="31" >
         <activity
-            android:name=".RecordRunActivity"
-            android:exported="false" >
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".ui.record_run.RecordRunActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light" >
@@ -94,6 +87,15 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <receiver
+            android:name="com.maulana.fitella.ui.record_run.LocationProviderChangedReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.location.PROVIDERS_CHANGED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
