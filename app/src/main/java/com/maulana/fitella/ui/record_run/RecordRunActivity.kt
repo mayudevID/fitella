@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Intent
 import android.content.IntentFilter
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
@@ -29,7 +30,7 @@ import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import kotlin.collections.ArrayList
 
 class RecordRunActivity : AppCompatActivity() {
-    private val TAG: String = "RecordRunActivity"
+    private val TAG = "RecordRunActivity"
     private var activityResultLauncher: ActivityResultLauncher<Array<String>>
 
     private lateinit var binding: ActivityRecordRunBinding
@@ -48,7 +49,14 @@ class RecordRunActivity : AppCompatActivity() {
 
             Log.d(TAG, "Permissions granted $allAreGranted")
             if (allAreGranted) {
-                recordRunViewModel.initCheckLocationSettings()
+                val intentLoc = Intent(this, LocationService::class.java)
+                intentLoc.action = LocationService.ACTION_START_FOREGROUND_SERVICE
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    this.startForegroundService(intentLoc)
+                } else {
+                    this.startService(intentLoc)
+                }
+                //recordRunViewModel.initCheckLocationSettings()
             }
         }
     }
@@ -102,14 +110,19 @@ class RecordRunActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        val appPerms = arrayOf(
+        val appPerms = arrayListOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.INTERNET
+            Manifest.permission.INTERNET,
         )
-        activityResultLauncher.launch(appPerms)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            appPerms.addAll(listOf(Manifest.permission.FOREGROUND_SERVICE, Manifest.permission.ACCESS_BACKGROUND_LOCATION))
+        }
+
+        activityResultLauncher.launch(appPerms.toTypedArray())
     }
 
     override fun onResume() {
@@ -119,10 +132,10 @@ class RecordRunActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (recordRunViewModel.requestingLocationUpdates) {
-            recordRunViewModel.requestingLocationUpdates = false
-            recordRunViewModel.stopLocationUpdates()
-        }
+        //if (recordRunViewModel.requestingLocationUpdates) {
+        //    recordRunViewModel.requestingLocationUpdates = false
+        //    recordRunViewModel.stopLocationUpdates()
+        //}
         binding.map.onPause()
     }
 
@@ -131,6 +144,7 @@ class RecordRunActivity : AppCompatActivity() {
         EventBus.getDefault().unregister(this);
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d(TAG, "Settings onActivityResult for $requestCode result $resultCode")
@@ -206,7 +220,7 @@ class RecordRunActivity : AppCompatActivity() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMsg(status: MyEventLocationSettingsChange) {
         if (status.on) {
-            recordRunViewModel.initMap()
+            //recordRunViewModel.initMap()
         } else {
             Log.i(TAG, "Stop something")
         }
