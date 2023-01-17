@@ -49,131 +49,46 @@ class RecordRunViewModel : ViewModel() {
     private val TAG: String = "RecordRunActivity"
     lateinit var map: MapView
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var lastLocation: Location? = null
-    private var locationCallback: LocationCallback
-    private var locationRequest: LocationRequest
-    var requestingLocationUpdates = false
-
     lateinit var constraintSet: ConstraintSet
     var startPoint: GeoPoint = GeoPoint(46.55951, 15.63970);
     lateinit var mapController: IMapController
-    private var marker: Marker? = null
     private var pathTracker: Polyline? = null
-    var runStatus: RunStatus = RunStatus.INIT
+    private var marker: Marker? = null
 
     private lateinit var vaOrange: ValueAnimator
     private lateinit var vaWhite: ValueAnimator
     private lateinit var vaMap: ValueAnimator
 
-    private var timerInSeconds: Int = 0
-    private lateinit var handler: Handler
     private val df = DecimalFormat("#.##")
-    private var listSpeed: ArrayList<Float> = arrayListOf()
 
-    init {
-        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
-            .setMinUpdateIntervalMillis(500)
-            .setMinUpdateDistanceMeters(0.5f)
-            .setMaxUpdates(750)
-            .build()
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                for (location in locationResult.locations) {
-                    updateLocation(location)
-                }
-            }
-        }
-    }
+    private var runStatus: RunStatus = RunStatus.RECORD_INIT
 
     fun setActivity(activity: RecordRunActivity) {
         this.activity = activity
     }
 
-    private fun initLocation() { //call in create
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
-        readLastKnownLocation()
-    }
+    fun updateLocation(newLocation: Location, newListSpeed: ArrayList<Float>?) {
+        if (newLocation.latitude != startPoint.latitude || newLocation.longitude != startPoint.longitude) {
+            startPoint.longitude = newLocation.longitude
+            startPoint.latitude = newLocation.latitude
 
-    @SuppressLint("MissingPermission")
-    private fun startLocationUpdates() { //onResume
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.getMainLooper()
-        )
-    }
+            getPositionMarker().position = startPoint
+            mapController.setZoom(18.5)
+            mapController.animateTo(startPoint)
 
-    fun stopLocationUpdates() { //onPause
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-    }
+            if (runStatus == RunStatus.RECORD_START) {
+                getPath().addPoint(startPoint.clone())
 
-    @SuppressLint("MissingPermission")
-    private fun readLastKnownLocation() {
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                location?.let { updateLocation(it) }
-            }
-    }
-
-    fun initCheckLocationSettings() {
-        val builder = LocationSettingsRequest.Builder()
-            .addLocationRequest(locationRequest)
-        val client: SettingsClient = LocationServices.getSettingsClient(activity)
-        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
-        task.addOnSuccessListener {
-            Log.d(TAG, "Settings Location IS OK")
-            MyEventLocationSettingsChange.globalState = true
-            initMap()
-        }
-
-        task.addOnFailureListener { exception ->
-            if (exception is ResolvableApiException) {
-                Log.d(TAG, "Settings Location addOnFailureListener call settings")
-                try {
-                    exception.startResolutionForResult(
-                        activity,
-                        RecordRunActivity.REQUEST_CHECK_SETTINGS
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        averageText = df.format(newListSpeed?.average()),
+                        distanceText = df.format(getPath().distance / 1000)
                     )
-                } catch (sendEx: IntentSender.SendIntentException) {
-                    Log.d(TAG, "Settings Location sendEx??")
                 }
             }
+
+            map.invalidate()
         }
-
-    }
-
-    fun updateLocation(newLocation: Location) {
-        lastLocation = newLocation
-        //var currentPoint: GeoPoint = GeoPoint(newLocation.latitude, newLocation.longitude);
-        startPoint.longitude = newLocation.longitude
-        startPoint.latitude = newLocation.latitude
-        getPositionMarker().position = startPoint
-        mapController.animateTo(startPoint)
-
-        if (runStatus == RunStatus.RECORD_START) {
-            getPath().addPoint(startPoint.clone())
-            listSpeed.add(newLocation.speed)
-            _uiState.update { currentState ->
-                currentState.copy(
-                    averageText = df.format(listSpeed.average()),
-                    distanceText = df.format(getPath().distance / 1000)
-                )
-            }
-        }
-
-        map.invalidate()
-    }
-
-    fun initMap() {
-        initLocation()
-        if (!requestingLocationUpdates) {
-            requestingLocationUpdates = true
-            startLocationUpdates()
-        }
-        mapController.setZoom(18.5)
-        mapController.setCenter(startPoint)
-        map.invalidate()
     }
 
     private fun getPositionMarker(): Marker {
@@ -202,55 +117,33 @@ class RecordRunViewModel : ViewModel() {
         return pathTracker!!
     }
 
-    fun startTimer() {
-        handler = Handler(Looper.getMainLooper())
-
-        handler.post(
-            object : Runnable {
-                override fun run() {
-                    val hrs: Int = timerInSeconds / 3600
-                    val mins: Int = timerInSeconds % 3600 / 60
-                    val secs: Int = timerInSeconds % 60
-
-                    //Log.d(TAG, String.format("%02d:%02d:%02d", hrs, mins, secs))
-
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            timerText = String.format("%02d:%02d:%02d", hrs, mins, secs)
-                        )
-                    }
-
-//                    binding.timerText.text =
-//                        String.format("%02d:%02d:%02d", hrs, mins, secs);
-
-                    timerInSeconds++
-
-                    handler.postDelayed(this, 1000)
-                }
-            }
-        )
+    fun setTimer(text: String) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                timerText = text
+            )
+        }
     }
 
     fun pauseTimer() {
-        handler.removeCallbacksAndMessages(null)
         _uiState.update { currentState ->
             currentState.copy(
                 buttonStop = View.GONE,
                 recordPauseLayout = View.VISIBLE
             )
         }
-//        binding.buttonStop.visibility = View.GONE
-//        binding.recordPauseLayout.visibility = View.VISIBLE
+
         runStatus = RunStatus.RECORD_STOP
     }
 
-    fun resumeRecord() {
+    fun resumeTimer() {
         _uiState.update { currentState ->
             currentState.copy(
                 recordPauseLayout = View.GONE,
                 buttonStop = View.VISIBLE
             )
         }
+
         runStatus = RunStatus.RECORD_START
     }
 
@@ -304,11 +197,11 @@ class RecordRunViewModel : ViewModel() {
                         recordLayout = View.VISIBLE
                     )
                 }
-                startTimer()
-                runStatus = RunStatus.RECORD_START
             },
             300
         )
+
+        runStatus = RunStatus.RECORD_START
     }
 
     private fun expandDown() {

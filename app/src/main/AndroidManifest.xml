@@ -24,7 +24,7 @@
         android:theme="@style/Theme.Fitella"
         tools:targetApi="31">
         <service
-            android:name=".ui.record_run.LocationService"
+            android:name=".services.LocationService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="location">

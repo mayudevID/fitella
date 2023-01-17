@@ -1,12 +1,12 @@
 package com.maulana.fitella.ui.record_run
 
 import android.Manifest
-import android.content.BroadcastReceiver
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
+import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,8 +16,18 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import com.maulana.fitella.databinding.ActivityRecordRunBinding
+import com.maulana.fitella.services.LocationService
+import com.maulana.fitella.services.LocationServiceUtils
+import com.maulana.fitella.utils.RunStatus
+import com.maulana.fitella.utils.getEnumExtra
+import com.maulana.fitella.utils.isServiceRunning
+import com.maulana.fitella.utils.parcelable
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -27,7 +37,6 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
-import kotlin.collections.ArrayList
 
 class RecordRunActivity : AppCompatActivity() {
     private val TAG = "RecordRunActivity"
@@ -37,6 +46,34 @@ class RecordRunActivity : AppCompatActivity() {
     private val recordRunViewModel: RecordRunViewModel by viewModels()
 
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
+
+    private lateinit var mService: LocationService
+    private var mBound: Boolean = false
+
+    private var newLoc: Location? = null
+    private var newTime: String? = null
+
+    private var isGpsEnabled: Boolean = false
+    private var isNetworkEnabled: Boolean = false
+    private var intentFilterGpsData: IntentFilter = IntentFilter("GPSLocationUpdates")
+    private var intentFilterTimerData: IntentFilter = IntentFilter("TimerUpdates")
+    private var intentFilterLocChange: IntentFilter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
+
+    private lateinit var mLocationReceiver: BroadcastReceiver
+    private lateinit var mLocationChangeReceiver: BroadcastReceiver
+    private lateinit var mTimerReceiver: BroadcastReceiver
+
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            val binder = service as LocationService.MyBinder
+            mService = binder.getService()
+            mBound = true
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            mBound = false
+        }
+    }
 
     init {
         this.activityResultLauncher = registerForActivityResult(
@@ -49,14 +86,7 @@ class RecordRunActivity : AppCompatActivity() {
 
             Log.d(TAG, "Permissions granted $allAreGranted")
             if (allAreGranted) {
-                val intentLoc = Intent(this, LocationService::class.java)
-                intentLoc.action = LocationService.ACTION_START_FOREGROUND_SERVICE
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    this.startForegroundService(intentLoc)
-                } else {
-                    this.startService(intentLoc)
-                }
-                //recordRunViewModel.initCheckLocationSettings()
+                initCheckLocationSettings()
             }
         }
     }
@@ -67,17 +97,24 @@ class RecordRunActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        EventBus.getDefault().register(this);
+        Log.d(TAG, "ON_START")
+
+        val intentBind = Intent(this, LocationService::class.java)
+        bindService(intentBind, connection, Context.BIND_AUTO_CREATE)
+
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "ON_CREATE")
+
         supportActionBar?.hide()
         recordRunViewModel.setActivity(this@RecordRunActivity)
 
-        val br: BroadcastReceiver = LocationProviderChangedReceiver()
-        val filter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
-        registerReceiver(br, filter)
+        setBroadcastReceiver()
 
         getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
 
@@ -110,7 +147,7 @@ class RecordRunActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        val appPerms = arrayListOf(
+        val appPerms = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -118,29 +155,44 @@ class RecordRunActivity : AppCompatActivity() {
             Manifest.permission.INTERNET,
         )
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            appPerms.addAll(listOf(Manifest.permission.FOREGROUND_SERVICE, Manifest.permission.ACCESS_BACKGROUND_LOCATION))
-        }
+        activityResultLauncher.launch(appPerms)
 
-        activityResultLauncher.launch(appPerms.toTypedArray())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val appPermsSecond = arrayOf(
+                Manifest.permission.FOREGROUND_SERVICE,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+            )
+
+            activityResultLauncher.launch(appPermsSecond)
+        }
     }
 
     override fun onResume() {
         super.onResume()
+        Log.d(TAG, "ON_RESUME")
         binding.map.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        //if (recordRunViewModel.requestingLocationUpdates) {
-        //    recordRunViewModel.requestingLocationUpdates = false
-        //    recordRunViewModel.stopLocationUpdates()
-        //}
+        Log.d(TAG, "ON_PAUSE")
         binding.map.onPause()
     }
 
     override fun onStop() {
+        Log.d(TAG, "ON_STOP")
         super.onStop()
+    }
+
+    fun apa() {
+        unbindService(connection)
+        mBound = false
+
+        LocationServiceUtils(this@RecordRunActivity).stopLocService()
+        unregisterReceiver(mLocationReceiver)
+        unregisterReceiver(mLocationChangeReceiver)
+        unregisterReceiver(mTimerReceiver)
+
         EventBus.getDefault().unregister(this);
     }
 
@@ -150,7 +202,7 @@ class RecordRunActivity : AppCompatActivity() {
         Log.d(TAG, "Settings onActivityResult for $requestCode result $resultCode")
         if (requestCode == REQUEST_CHECK_SETTINGS) {
             if (resultCode == RESULT_OK) {
-                recordRunViewModel.initMap()
+//                recordRunViewModel.initMap()
             }
         }
     }
@@ -176,28 +228,64 @@ class RecordRunActivity : AppCompatActivity() {
         }
     }
 
+    private fun initCheckLocationSettings() {
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(
+                LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
+                .setMinUpdateIntervalMillis(500)
+                .setMinUpdateDistanceMeters(0.5f)
+                .setMaxUpdates(750)
+                .build()
+            )
+        val client: SettingsClient = LocationServices.getSettingsClient(this)
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+        task.addOnSuccessListener {
+            Log.d(TAG, "Settings Location IS OK")
+            MyEventLocationSettingsChange.globalState = true
+
+            checkService()
+        }
+
+        task.addOnFailureListener { exception ->
+            if (exception is ResolvableApiException) {
+                Log.d(TAG, "Settings Location addOnFailureListener call settings")
+                try {
+                    exception.startResolutionForResult(
+                        this,
+                        RecordRunActivity.REQUEST_CHECK_SETTINGS
+                    )
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    Log.d(TAG, "Settings Location sendEx??")
+                }
+            }
+        }
+
+    }
+
     private fun uiState() {
         with (binding) {
            buttonStart.setOnClickListener {
-                recordRunViewModel.expandUp()
-            }
+               LocationServiceUtils(this@RecordRunActivity).startRecord()
+               recordRunViewModel.expandUp()
+           }
 
            buttonStop.setOnClickListener {
-                recordRunViewModel.pauseTimer()
+               LocationServiceUtils(this@RecordRunActivity).pauseRecord()
+               recordRunViewModel.pauseTimer()
             }
 
            buttonResume.setOnClickListener {
-                recordRunViewModel.startTimer()
-                recordRunViewModel.resumeRecord()
+               LocationServiceUtils(this@RecordRunActivity).resumeRecord()
+               recordRunViewModel.resumeTimer()
             }
 
            fabGps.setOnClickListener {
                 recordRunViewModel.focusGps()
-            }
+           }
 
            buttonClose.setOnClickListener {
                 finish()
-            }
+           }
         }
 
         lifecycleScope.launch {
@@ -217,12 +305,72 @@ class RecordRunActivity : AppCompatActivity() {
         }
     }
 
+    private fun setBroadcastReceiver() {
+        //Location Change Receiver
+        mLocationChangeReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                intent?.action?.let { act ->
+                    if (act.matches("android.location.PROVIDERS_CHANGED".toRegex())) {
+                        val locationManager =
+                            context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                        isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                        isNetworkEnabled =
+                            locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+                        Log.i("RecordRunActivity","Location Providers changed, is GPS Enabled: " + isGpsEnabled)
+
+                        MyEventLocationSettingsChange.setChangeAndPost(isGpsEnabled)
+                    }
+                }
+            }
+        }
+        registerReceiver(mLocationChangeReceiver, intentFilterLocChange)
+
+        //Location Receiver
+        mLocationReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent) {
+                newLoc = intent.parcelable("LOCATION")
+
+                if (newLoc != null) {
+                    if (mBound) {
+                        recordRunViewModel.updateLocation(
+                            newLoc!!,
+                            mService.listSpeed,
+                        )
+                        Log.d(TAG, newLoc.toString())
+                    } else {
+                        Log.d(TAG, "Service not bound")
+                    }
+                    newLoc = null
+                }
+            }
+        }
+        registerReceiver(mLocationReceiver, intentFilterGpsData)
+
+        //Timer Receiver
+        mTimerReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent) {
+                newTime = intent.getStringExtra("TIMER")
+
+                if (newTime != null) {
+                    recordRunViewModel.setTimer(newTime!!)
+                    newTime = null
+                }
+            }
+        }
+        registerReceiver(mTimerReceiver, intentFilterTimerData)
+    }
+
+    private fun checkService() {
+        LocationServiceUtils(this).startLocService()
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMsg(status: MyEventLocationSettingsChange) {
         if (status.on) {
-            //recordRunViewModel.initMap()
+            Log.i(TAG, "LOC CHANGE SUBSCRIBE")
+            checkService()
         } else {
-            Log.i(TAG, "Stop something")
+            Log.i(TAG, "LOC CHANGE STOP")
         }
     }
 }

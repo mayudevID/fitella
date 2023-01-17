@@ -56,7 +56,7 @@ class OnboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val appPerms = arrayListOf(
+        val appPerms = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -64,11 +64,16 @@ class OnboardActivity : ComponentActivity() {
             Manifest.permission.INTERNET,
         )
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            appPerms.addAll(listOf(Manifest.permission.FOREGROUND_SERVICE, Manifest.permission.ACCESS_BACKGROUND_LOCATION))
-        }
+        activityResultLauncher.launch(appPerms)
 
-        activityResultLauncher.launch(appPerms.toTypedArray())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val appPermsSecond = arrayOf(
+                Manifest.permission.FOREGROUND_SERVICE,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+            )
+
+            activityResultLauncher.launch(appPermsSecond)
+        }
 
         setContent {
             FitellaTheme(this, darkTheme = false) {
